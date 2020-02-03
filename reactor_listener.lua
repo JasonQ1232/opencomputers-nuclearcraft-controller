@@ -16,7 +16,8 @@ term.clear()
 os.sleep(1)
 modem.open(network_port)
 
-
+function start()
+end
 
 local network_report = thread.create(function()
     while true do
