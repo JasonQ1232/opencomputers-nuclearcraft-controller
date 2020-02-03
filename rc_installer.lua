@@ -10,6 +10,5 @@ os.execute("wget -f https://github.com/JasonQ1232/opencomputers-nuclearcraft-con
 os.execute("wget -f https://github.com/JasonQ1232/opencomputers-nuclearcraft-controller/raw/master/lib/misc.lua /usr/lib/reactor_control/misc.lua")
 
 os.execute("wget -f https://github.com/JasonQ1232/opencomputers-nuclearcraft-controller/raw/master/reactor_controller.lua /etc/rc.d/reactor_control/controller.lua")
-os.execute("wget -f https://github.com/JasonQ1232/opencomputers-nuclearcraft-controller/raw/master/reactor_relay.lua /etc/rc.d/reactor_control/relay.lua")
 os.execute("wget -f https://github.com/JasonQ1232/opencomputers-nuclearcraft-controller/raw/master/reactor_listener.lua /etc/rc.d/reactor_control/listener.lua")
 os.execute("wget -f https://github.com/JasonQ1232/opencomputers-nuclearcraft-controller/raw/master/update.lua /home/reactor_control/update.lua")
