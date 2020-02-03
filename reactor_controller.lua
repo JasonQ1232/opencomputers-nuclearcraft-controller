@@ -105,7 +105,7 @@ local function reactor_check_heat()-- Percent is a decimal
         print("Shutting down reactor.")
         print("")
         reactor.deactivate()
-        beep(5)
+        misc.beep(5)
         isSafe = false
         resume_ask()
     else
@@ -128,7 +128,7 @@ local function reactor_check_power()-- Percent is a decimal
         print("Shutting down reactor.")
         print("")
         reactor.deactivate()
-        beep(3)
+        misc.beep(3)
         isSafe = false
         while currentLevel > (safePercent * reactorMax) do
             os.sleep(1)
