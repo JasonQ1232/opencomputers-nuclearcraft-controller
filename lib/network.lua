@@ -10,7 +10,6 @@ function network.sendTCP(destination, outbound_port, outbound_message)
         modem.send(destination, outbound_port, outbound_message)
         local _, _, origin, inbound_port, _, inbound_message = event.pull(5, "modem_message")
         if origin == destination and inbound_port == outbound_port and inbound_message == outbound_message then
-            print("sent")
             return true
         end
         os.sleep(0.2)
@@ -34,6 +33,5 @@ function network.broadcastTCP(port, message)
     end
     return true
 end
-
 
 return network
