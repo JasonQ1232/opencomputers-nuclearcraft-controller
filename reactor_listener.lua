@@ -21,15 +21,17 @@ modem.open(network_port)
 local network_report = thread.create(function()
     while true do
         --print("worker start")
-        local origin, port, message = network.recieveTCP()
-        if message == "reactor_request_report" and port == network_port then
-            print("msg")
-            local data = serialization.serialize(report_table)
-            print(data)
+        origin, port, message = network.recieveTCP()
+        if string.find(message, "header=\"reactor_report\"") and port == network_port then
+            local reactor_report = serialization.unserialize(message)
+            misc.print_report(reactor_report.name, reactor_report.status, reactor_report.message)
+        elseif message == "reactor_alert" then
             os.sleep(1)
-            network.sendTCP(origin, network_port, data)
+            network.sendTCP(origin, network_port, "reactor_request_report")
+            misc.beep(3)
+        --term.clear()
         end
-        os.sleep(0.2)
+        os.sleep(0.1)
     end
 end)
 
