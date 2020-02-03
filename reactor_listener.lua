@@ -6,7 +6,7 @@ local term = require("term")
 local thread = require("thread")
 local modem = component.modem
 local serialization = require("serialization")
-local reactor = require("reactor_control/reactor")
+local reactor = require("reactor")
 
 ---  SETTINGS  ---
 
