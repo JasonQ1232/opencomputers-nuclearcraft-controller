@@ -21,8 +21,7 @@ local network_report = thread.create(function()
     while true do
         --print("worker start")
         origin, port, message = network.recieveTCP()
-
-        if string.find(message, "header=\"reactor_report\"") and port == network_port and origin then
+        if string.find(message, "header=\"reactor_report\"") and port == network_port and origin ~= modem.address then
             local reactor_report = serialization.unserialize(message)
             misc.print_report(reactor_report.name, reactor_report.status, reactor_report.message)
         elseif message == "reactor_alert" then
