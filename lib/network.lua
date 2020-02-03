@@ -19,10 +19,8 @@ end
 
 function network.recieveTCP()
     local _, _, origin, port, _, message = event.pull("modem_message")
-    for i = 0, 5, 1 do
-        modem.send(origin, port, message)
-        os.sleep(0.2)
-    end
+    modem.send(origin, port, message)
+    os.sleep(1)
     return origin, port, message
 end
 
