@@ -1,33 +1,40 @@
 local component = require("component")
+local event = require("event")
+local os = require("os")
 local modem = component.modem
 
 local network = {}
 
-local function network.sendTCP(destination, outbound_port, outbound_message)
-    timeout = 5
+function network.sendTCP(destination, outbound_port, outbound_message)
     while true do
-      modem.send(destination, outbound_port, outbound_message)
-      local _, _, origin, inbound_port, _, inbound_message = event.pull(timout, "modem_message")
-      if origin == destination and inbound_port == outbound_port and inbound_message == outbound_message then
-        print("sent")
-        return true
-        print("it broke")
-      end
-      return false
+        modem.send(destination, outbound_port, outbound_message)
+        local _, _, origin, inbound_port, _, inbound_message = event.pull(5, "modem_message")
+        if origin == destination and inbound_port == outbound_port and inbound_message == outbound_message then
+            print("sent")
+            return true
+        end
+        os.sleep(0.2)
     end
-  end
-  
-  local function network.recieveTCP()
+    return false
+end
+
+function network.recieveTCP()
     local _, _, origin, port, _, message = event.pull("modem_message")
-    for i=0,5,1 do
-      modem.send(origin, port, message)
+    for i = 0, 5, 1 do
+        modem.send(origin, port, message)
+        os.sleep(0.2)
     end
+    print(origin .. port .. message)
     return origin, port, message
-  end
-  
-  local function network.broadcastTCP(port, message)
-    for i=0,5,1 do
-      modem.broadcast(port, message)
+end
+
+function network.broadcastTCP(port, message)
+    for i = 0, 5, 1 do
+        modem.broadcast(port, message)
+        os.sleep(0.2)
     end
     return true
-  end
+end
+
+
+return network

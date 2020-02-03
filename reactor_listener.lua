@@ -6,7 +6,8 @@ local term = require("term")
 local thread = require("thread")
 local modem = component.modem
 local serialization = require("serialization")
-local reactor = require("reactor_control/reactor")
+local network = require("reactor_control/network")
+local misc = require("reactor_control/misc")
 
 ---  SETTINGS  ---
 network_port = 244
@@ -21,40 +22,24 @@ modem.open(network_port)
 
 local network_report = thread.create(function()
     while true do
-        --print("worker start")
-        recieveTCP()
-        if message == "reactor_request_report" and port == network_port then
-            os.sleep(1)
+        print("worker start")
+		local origin, port, message = network.recieveTCP()
+		print("a tcp")
+		if message == "reactor_request_report" and port == network_port then
+			print("msg")
             local data = serialization.serialize(report_table)
-            print(data)
-            sendTCP(origin, network_port, data)
+			print(data)
+			os.sleep(1)
+            network.sendTCP(origin, network_port, data)
         end
         os.sleep(0.2)
     end
 end)
 
-local reporter = thread.create(function()
-    while true do
-        --print("worker start")
-        origin, port, message = recieveTCP()
-        --print(message)
-        if string.find(message, "header=\"reactor_report\"") and port == network_port then
-            --print(message)
-            local reactor_report = serialization.unserialize(message)
-            print_report(reactor_report.name, reactor_report.status, reactor_report.message)
-        elseif message == "reactor_alert" then
-            os.sleep(1)
-            sendTCP(origin, network_port, "reactor_request_report")
-            beep(3)
-        --term.clear()
-        end
-        os.sleep(0.1)
-    end
-end)
 
 while true do
     os.sleep(1)
-    if reporter:status() == "dead" then
-        print("Reporter " .. reporter:status())
+    if network_report:status() == "dead" then
+        print("Reporter " .. network_report:status())
     end
 end

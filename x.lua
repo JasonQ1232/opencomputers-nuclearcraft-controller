@@ -1,3 +1,4 @@
-local reactor = require("reactor")
+os = require("os")
 
-reactor.beep(1)
+os.execute("rm /lib/reactor_control/network.lua")
+os.execute("edit /lib/reactor_control/network.lua")
