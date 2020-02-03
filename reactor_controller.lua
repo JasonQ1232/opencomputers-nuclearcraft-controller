@@ -25,7 +25,6 @@ local reactor_cap_safe
 local report_table = {}-- Name, Status, Msg
 
 function start()
-
 end
 
 if not component.isAvailable("nc_fission_reactor") then
