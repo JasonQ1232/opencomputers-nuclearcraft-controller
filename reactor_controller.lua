@@ -52,6 +52,7 @@ local network_report = thread.create(function()
     while true do
         --print("worker start")
         local origin, port, message = network.recieveTCP()
+        print("got message" .. port .. message)
         if message == "reactor_request_report" and port == network_port then
             os.sleep(1)
             local data = serialization.serialize(report_table)
