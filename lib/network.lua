@@ -5,6 +5,7 @@ local os = require("os")
 local modem = component.modem
 local thread = require("thread")
 
+
 local network = {}
 
 
@@ -20,6 +21,7 @@ function network.listen()
         messages[i].port = port
         messages[i].message = message
         messages[i].uptime = computer.uptime()
+        print(message .. " : " .. #messages)
         os.sleep(0.1)
     end
     return true
@@ -27,6 +29,7 @@ end
 
 function network.search_table(message)
     local results = {}
+    print("something requsted a search! woop-woop")
     if #messages > 0 then
         for i=1, #messages, i do
             if messages[i].message == message then
@@ -72,7 +75,7 @@ end
 local last_origin, last_port, last_message
 function network.recieveTCP()
     while true do
-        --print(#messages .. " new messages") 
+        print(#messages .. " new messages") 
         if #messages > 0 then
             print("whyyyy " .. #messages)
             for i = 1, #messages, 1 do
