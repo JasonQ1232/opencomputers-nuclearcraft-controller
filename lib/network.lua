@@ -7,8 +7,10 @@ local thread = require("thread")
 
 local network = {}
 
+
+
 local messages = {}
-local listener = thread.create(function()
+function network.listen()
     while true do
         print("okay?")
         local _, _, origin, port, _, message = event.pull("modem_message")
@@ -21,9 +23,9 @@ local listener = thread.create(function()
         os.sleep(0.1)
     end
     return true
-end)
+end
 
-local function search_table(message)
+function network.search_table(message)
     local results = {}
     if #messages > 0 then
         for i=1, #messages, i do
@@ -100,7 +102,6 @@ function network.recieveTCP()
         os.sleep(0.2)
     end
     print("huh")
-    thread.waitForAll({listener})
     return origin, port, message
 end
 

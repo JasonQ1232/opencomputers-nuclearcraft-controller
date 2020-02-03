@@ -13,6 +13,8 @@ network_port = 244
 term.clear()
 os.sleep(1)
 modem.open(network_port)
+local network_report = thread.create(netowrk.listen())
+
 
 function start()
 end
