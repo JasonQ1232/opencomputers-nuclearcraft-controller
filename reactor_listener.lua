@@ -1,7 +1,5 @@
 local component = require("component")
-local computer = require("computer")
 local os = require("os")
-local event = require("event")
 local term = require("term")
 local thread = require("thread")
 local modem = component.modem

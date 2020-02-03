@@ -1,5 +1,4 @@
 local component = require("component")
-local computer = require("computer")
 local io = require("io")
 local os = require("os")
 local event = require("event")
@@ -7,7 +6,8 @@ local term = require("term")
 local thread = require("thread")
 local serialization = require("serialization")
 local modem = component.modem
-local reactor = require("reactor_control/reactor")
+local network = require("reactor_control/network")
+local misc = require("reactor_control/misc")
 
 ---  SETTINGS  ---
 reactor_temp_max_percent = 0.25
@@ -51,12 +51,12 @@ modem.open(network_port)
 local network_report = thread.create(function()
     while true do
         --print("worker start")
-        recieveTCP()
+        local origin, port, message = network.recieveTCP()
         if message == "reactor_request_report" and port == network_port then
             os.sleep(1)
             local data = serialization.serialize(report_table)
             print(data)
-            sendTCP(origin, network_port, data)
+            network.sendTCP(origin, network_port, data)
         end
         os.sleep(0.2)
     end
@@ -66,7 +66,7 @@ local network_alert = thread.create(function()
     local lastStatus
     while true do
         if report_table.status ~= lastStatus then
-            broadcastTCP(network_port, "reactor_alert")
+            network.broadcastTCP(network_port, "reactor_alert")
             print("reactor alert")
         end
         lastStatus = report_table.status
