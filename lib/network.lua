@@ -10,7 +10,7 @@ local network = {}
 local messages = {}
 local listener = thread.create(function()
     while true do
-        --print("okay?")
+        print("okay?")
         local _, _, origin, port, _, message = event.pull("modem_message")
         i = #messages + 1
         messages[i] = {}
