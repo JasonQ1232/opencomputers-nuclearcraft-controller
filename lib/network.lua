@@ -9,9 +9,11 @@ local network = {}
 function network.sendTCP(destination, outbound_port, outbound_message)
     while true do
         modem.send(destination, outbound_port, outbound_message)
-        local _, _, origin, inbound_port, _, inbound_message = event.pull(5, "modem_message")
-        if origin == destination and inbound_port == outbound_port and inbound_message == outbound_message then
-            return true
+        for i=0, 5, 1 do
+            local _, _, origin, inbound_port, _, inbound_message = event.pull(5, "modem_message")
+            if origin == destination and inbound_port == outbound_port and inbound_message == outbound_message then
+                return true
+            end
         end
         os.sleep(0.2)
     end
@@ -20,37 +22,55 @@ end
 
 local last_origin, last_port, last_message
 local messages = {}
-local index = 0
+local index = 1
 
 function network.recieveTCP()
     local listener = thread.create(function()
         while true do
             print("okay?")
             local _, _, origin, port, _, message = event.pull("modem_message")
-            print("i = " .. index)
+            --print("i = " .. index)
             messages[index] = {}
-            print(index)
+            --print(index)
             messages[index].origin = origin
-            print(origin)
+            --print(origin)
             messages[index].port = port
-            print(port)
+            --print(port)
             messages[index].message = message
-            print("okay!")
+            --print(message)
+            index = index + 1
+            --print(index)
+            os.sleep(0.1)
         end
     end)
     while true do
         if listener:status() == "dead" then
             print("network.recieveTCP() " .. listener:status())
         end
-        if last_origin ~= origin and last_port ~= port and last_message ~= message then
-            print("wat")
-            network.sendTCP(origin, port, message)
-            os.sleep(1)
-            last_origin = origin
-            last_port = port
-            last_message = message
+        print(#messages .. " new messages") 
+        if #messages > 0 then
+            print("whyyyy")
+            for i = 1, #messages, 1 do
+
+                local origin = messages[i].origin
+                local port = messages[i].port
+                local message = messages[i].message
+
+                if last_origin ~= origin and last_port ~= port and last_message ~= message then
+                    print("original")
+                    network.sendTCP(origin, port, message)
+                    os.sleep(1)
+                end
+                last_origin = origin
+                print(last_origin)
+                last_port = port
+                print(last_port)
+                last_message = message
+                print(last_message)
+                table.remove(messages, i)
+            end
         end
-        print("hmm")
+        --print("hmm")
         os.sleep(0.2)
     end
     print("huh")
