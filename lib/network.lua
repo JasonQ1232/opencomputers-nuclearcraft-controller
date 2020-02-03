@@ -22,16 +22,11 @@ function network.recieveTCP()
     while true do
         local _, _, origin, port, _, message = event.pull("modem_message")
         if last_origin ~= origin and last_port ~= port and last_message ~= message then
-            for i = -, 5, 1 do
-                modem.sendTCP(origin, port, message)
-            end
+            modem.sendTCP(origin, port, message)
         end
+        os.sleep(1)
+        return origin, port, message
     end
-
-    local _, _, origin, port, _, message = event.pull("modem_message")
-    modem.send(origin, port, message)
-    os.sleep(1)
-    return origin, port, message
 end
 
 function network.broadcastTCP(port, message)
