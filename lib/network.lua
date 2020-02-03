@@ -12,7 +12,7 @@ local network = {}
 local messages = {}
 function network.listen()
     while true do
-        print("okay?")
+        --print("okay?")
         local _, _, origin, port, _, message = event.pull("modem_message")
         i = #messages + 1
         messages[i] = {}
