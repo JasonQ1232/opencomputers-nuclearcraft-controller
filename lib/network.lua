@@ -17,7 +17,17 @@ function network.sendTCP(destination, outbound_port, outbound_message)
     return false
 end
 
+local last_origin, last_port, last_message
 function network.recieveTCP()
+    while true do
+        local _, _, origin, port, _, message = event.pull("modem_message")
+        if last_origin ~= origin and last_port ~= port and last_message ~= message then
+            for i = -, 5, 1 do
+                modem.sendTCP(origin, port, message)
+            end
+        end
+    end
+
     local _, _, origin, port, _, message = event.pull("modem_message")
     modem.send(origin, port, message)
     os.sleep(1)
