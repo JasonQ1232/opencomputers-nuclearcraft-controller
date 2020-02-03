@@ -24,7 +24,6 @@ function network.recieveTCP()
         modem.send(origin, port, message)
         os.sleep(0.2)
     end
-    print(origin .. port .. message)
     return origin, port, message
 end
 

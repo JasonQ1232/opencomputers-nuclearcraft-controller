@@ -22,14 +22,13 @@ modem.open(network_port)
 
 local network_report = thread.create(function()
     while true do
-        print("worker start")
-		local origin, port, message = network.recieveTCP()
-		print("a tcp")
-		if message == "reactor_request_report" and port == network_port then
-			print("msg")
+        --print("worker start")
+        local origin, port, message = network.recieveTCP()
+        if message == "reactor_request_report" and port == network_port then
+            print("msg")
             local data = serialization.serialize(report_table)
-			print(data)
-			os.sleep(1)
+            print(data)
+            os.sleep(1)
             network.sendTCP(origin, network_port, data)
         end
         os.sleep(0.2)
