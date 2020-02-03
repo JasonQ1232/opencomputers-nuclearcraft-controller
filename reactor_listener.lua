@@ -9,8 +9,7 @@ local misc = require("reactor_control/misc")
 
 ---  SETTINGS  ---
 network_port = 244
-
-
+enable_relay = true
 ---END SETTINGS---
 term.clear()
 os.sleep(1)
@@ -23,6 +22,13 @@ local network_report = thread.create(function()
     while true do
         --print("worker start")
         origin, port, message = network.recieveTCP()
+        
+        if enable_relay == true then
+            local relay = thread.create(function()
+                network.broadcastTCP(port, message)
+            end)
+        end
+
         if string.find(message, "header=\"reactor_report\"") and port == network_port then
             local reactor_report = serialization.unserialize(message)
             misc.print_report(reactor_report.name, reactor_report.status, reactor_report.message)
@@ -33,6 +39,10 @@ local network_report = thread.create(function()
         --term.clear()
         end
         os.sleep(0.1)
+        if enable_relay == true then
+            thread.waitForAll({relay})
+            relay:join()
+        end
     end
 end)
 
