@@ -26,7 +26,7 @@ local network_report = thread.create(function()
             local reactor_report = serialization.unserialize(message)
             misc.print_report(reactor_report.name, reactor_report.status, reactor_report.message)
         elseif message == "reactor_alert" then
-            os.sleep(1)
+            os.sleep(0.5)
             network.sendTCP(origin, network_port, "reactor_request_report")
             misc.beep(3)
         --term.clear()
