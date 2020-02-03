@@ -1,6 +1,7 @@
 os = require("os")
 
 os.execute("mkdir /etc/rc.d/reactor_control/")
+os.execute("mkdir /usr/lib")
 os.execute("mkdir /home/reactor_control")
 
 os.execute("mv rc_installer.lua /home/reactor_control/rc_installer.lua")
