@@ -2,6 +2,7 @@ local component = require("component")
 local event = require("event")
 local os = require("os")
 local modem = component.modem
+local thread = require("thread")
 
 local network = {}
 
@@ -18,15 +19,43 @@ function network.sendTCP(destination, outbound_port, outbound_message)
 end
 
 local last_origin, last_port, last_message
+local messages = {}
+local index = 0
+
 function network.recieveTCP()
-    while true do
-        local _, _, origin, port, _, message = event.pull("modem_message")
-        if last_origin ~= origin and last_port ~= port and last_message ~= message then
-            modem.sendTCP(origin, port, message)
+    local listener = thread.create(function()
+        while true do
+            print("okay?")
+            local _, _, origin, port, _, message = event.pull("modem_message")
+            print("i = " .. index)
+            messages[index] = {}
+            print(index)
+            messages[index].origin = origin
+            print(origin)
+            messages[index].port = port
+            print(port)
+            messages[index].message = message
+            print("okay!")
         end
-        os.sleep(1)
-        return origin, port, message
+    end)
+    while true do
+        if listener:status() == "dead" then
+            print("network.recieveTCP() " .. listener:status())
+        end
+        if last_origin ~= origin and last_port ~= port and last_message ~= message then
+            print("wat")
+            network.sendTCP(origin, port, message)
+            os.sleep(1)
+            last_origin = origin
+            last_port = port
+            last_message = message
+        end
+        print("hmm")
+        os.sleep(0.2)
     end
+    print("huh")
+    thread.waitForAll({listener})
+    return origin, port, message
 end
 
 function network.broadcastTCP(port, message)
