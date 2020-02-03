@@ -25,13 +25,12 @@ end)
 
 local function search_table(message)
     local results = {}
-    for i=1, #messages, i do
-        if messages[i].message == message then
-            table.insert(results, i)
+    if #messages > 0 then
+        for i=1, #messages, i do
+            if messages[i].message == message then
+                table.insert(results, i)
+            end
         end
-    end
-
-    if(#messages > 0) then
         return results
     else
         return nil
