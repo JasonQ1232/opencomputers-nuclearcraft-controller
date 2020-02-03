@@ -36,6 +36,9 @@ local network_report = thread.create(function()
     end
 end)
 
+function stop()
+    network_report:kill()
+end
 
 while true do
     os.sleep(1)
