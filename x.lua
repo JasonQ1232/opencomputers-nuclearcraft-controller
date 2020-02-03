@@ -1,4 +1,6 @@
 os = require("os")
 
-os.execute("rm /lib/reactor_control/network.lua")
-os.execute("edit /lib/reactor_control/network.lua")
+os.execute("rm /etc/rc.d/reactor_control/network.lua")
+os.execute("edit /etc/rc.d/reactor_control/network.lua")
+
+
