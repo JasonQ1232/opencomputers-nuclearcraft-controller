@@ -1,3 +1,6 @@
+local reactor {
+
+
 local function beep(count)
   for i=1, count, 1 do
     computer.beep()
@@ -32,3 +35,15 @@ local function broadcastTCP(port, message)
     modem.broadcast(port, message)
   end
 end
+
+local function print_report(name, status, message)
+  print("Reactor: " .. name)
+  print("Status: " .. status)
+  print("Message: " .. message)
+  print()
+end
+
+
+
+}
+return reactor
